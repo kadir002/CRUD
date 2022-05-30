@@ -37,14 +37,14 @@ class ProductosController extends Controller
 
         $imageName = $this->randoImageName();
 
-        $fullPath = public_path('/storage/productoImagen/' . $imageName);
+      
 
         $image = $request->fileSource;
         $imageContent = $this->imageBase64Content($image);
 
-        $imgUpload =  File::put($fullPath, $imageContent);
+        
 
-        if (isset($imgUpload)) {
+        if (Storage::put('public/productoImagen/'.$imageName, $imageContent)) {
             $prductos = new producto();
             $prductos->nombre = $request['nombre'];
             $prductos->categoria = $request['categoria'];
@@ -77,12 +77,10 @@ class ProductosController extends Controller
             $imgUpload =  Storage::delete($imgName);
             if ($imgUpload) {
                 $imageName = $this->randoImageName();
-
-                $fullPath = public_path('/storage/productoImagen/' . $imageName);
-
                 $image = $request->fileSource;
                 $imageContent = $this->imageBase64Content($image);
-                $imgUpload =  File::put($fullPath, $imageContent);
+                Storage::put('public/productoImagen/'.$imageName, $imageContent);
+                
                 $producto->img = 'http://127.0.0.1:8000/storage/productoImagen/' . $imageName;
             }
         }
